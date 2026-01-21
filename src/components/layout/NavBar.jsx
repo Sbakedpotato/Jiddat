@@ -18,14 +18,14 @@ const NavBar = () => {
   ]
 
   const navLinks = categories.length
-    ? categories.map((cat) => ({ path: `/category/${cat.id}`, label: cat.label }))
+    ? categories.map((cat) => ({ path: `/shop?category=${cat.id}`, label: cat.label || cat.name }))
     : fallbackLinks
 
   return (
     <nav className="border-b border-brand-light bg-white/50 backdrop-blur-sm">
       <div className="mx-auto flex max-w-[1400px] items-center justify-center gap-8 px-6 py-3 text-sm font-medium text-brand-gray">
         <Link
-          to="/categories"
+          to="/shop"
           className="flex items-center gap-2 text-brand-dark hover:text-brand-black"
         >
           All Categories

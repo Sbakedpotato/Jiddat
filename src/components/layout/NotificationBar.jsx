@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import { api } from '../../services/api'
+import { Link } from 'react-router-dom'
+import { siteContent } from '../../data/content'
 
 const NotificationBar = () => {
-  const [message, setMessage] = useState('')
+  const { notificationBar } = siteContent
+  const [visible, setVisible] = useState(true)
 
-  useEffect(() => {
-    api
-      .getNotification()
-      .then((data) => setMessage(data?.message || ''))
-      .catch(() => setMessage(''))
-  }, [])
+  if (!visible || !notificationBar?.message) return null
 
-  if (!message) return null
   return (
-    <div className="bg-brand-black px-4 py-2.5 text-center text-xs font-medium tracking-wide text-white">
-      {message}
+    <div className="relative bg-brand-black px-4 py-2.5 text-center">
+      <Link
+        to={notificationBar.link || '/our-story'}
+        className="text-xs font-medium tracking-wide text-white hover:text-brand-accent transition-colors"
+      >
+        {notificationBar.message}
+      </Link>
     </div>
   )
 }

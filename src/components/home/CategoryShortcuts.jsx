@@ -8,15 +8,15 @@ const CategoryShortcuts = ({ categories = [] }) => {
     <section className="mt-16">
       <div className="mb-8 flex items-end justify-between">
         <h2 className="text-2xl font-bold tracking-tight text-brand-black">Shop by Category</h2>
-        <Link to="/categories" className="text-sm font-medium text-brand-gray hover:text-brand-black">
-          View all categories
+        <Link to="/shop" className="text-sm font-medium text-brand-gray hover:text-brand-accent transition-colors">
+          View all
         </Link>
       </div>
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
         {categories.map((category) => (
           <Link
             key={category.id}
-            to={`/category/${category.id}`}
+            to={`/shop?category=${category.id}`}
             className="group flex flex-col items-center gap-4 rounded-2xl bg-brand-light/30 p-6 transition-colors hover:bg-brand-light/60"
           >
             <div className="relative h-24 w-24 overflow-hidden rounded-full bg-white shadow-soft transition-transform group-hover:scale-110">

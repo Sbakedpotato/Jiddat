@@ -1,136 +1,67 @@
--- Disable foreign key checks to allow truncation
-SET FOREIGN_KEY_CHECKS = 0;
+USE jiddat;
 
--- Truncate tables to start fresh
-TRUNCATE TABLE order_items;
-TRUNCATE TABLE orders;
-TRUNCATE TABLE addresses;
-TRUNCATE TABLE wishlists;
-TRUNCATE TABLE recommendation_items;
-TRUNCATE TABLE recommendation_sections;
-TRUNCATE TABLE flash_deals;
-TRUNCATE TABLE hero_banners;
-TRUNCATE TABLE products;
-TRUNCATE TABLE brands;
-TRUNCATE TABLE categories;
-TRUNCATE TABLE users;
-TRUNCATE TABLE site_content;
-
--- Re-enable foreign key checks
-SET FOREIGN_KEY_CHECKS = 1;
-
--- 1. Users
-INSERT INTO users (id, name, email, password_hash, role) VALUES
-(1, 'User1', 'User@example.com', '$2a$12$wbX016wYA8JCjvn64GporeeckICej2xNlVI2zMO20bBMz2olf5S2K', 'user'), -- Password: 12345678
-(2, 'Admin', 'admin@gocart.com', '$2a$12$wbX016wYA8JCjvn64GporeeckICej2xNlVI2zMO20bBMz2olf5S2K', 'admin'); -- Password: 12345678
-
--- 2. Categories
+-- Categories (Apparel-focused)
 INSERT INTO categories (id, name, image_url) VALUES
-('laptops', 'Laptops', 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&q=80&w=500'),
-('audio', 'Audio', 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&q=80&w=500'),
-('wearables', 'Wearables', 'https://images.unsplash.com/photo-1510017803434-a899398421b3?auto=format&fit=crop&q=80&w=500'),
-('phones', 'Smartphones', 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&q=80&w=500'),
-('cameras', 'Cameras', 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80&w=500'),
-('accessories', 'Accessories', 'https://images.unsplash.com/photo-1629198688000-71f23e745b6e?auto=format&fit=crop&q=80&w=500'),
-('tablets', 'Tablets', 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&q=80&w=500'),
-('gaming', 'Gaming', 'https://images.unsplash.com/photo-1592840496694-26d035b52b48?auto=format&fit=crop&q=80&w=500'),
-('smarthome', 'Smart Home', 'https://images.unsplash.com/photo-1558002038-1091a166111c?auto=format&fit=crop&q=80&w=500'),
-('monitors', 'Monitors', 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&q=80&w=500');
+  ('tops', 'Tops', 'https://images.unsplash.com/photo-1562157873-818bc0726f68?w=400'),
+  ('dresses', 'Dresses', 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400'),
+  ('bottoms', 'Bottoms', 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400'),
+  ('outerwear', 'Outerwear', 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400'),
+  ('accessories', 'Accessories', 'https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?w=400');
 
--- 3. Brands
-INSERT INTO brands (id, name, image_url) VALUES
-('apple', 'Apple', 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg'),
-('sony', 'Sony', 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Sony_logo.svg'),
-('samsung', 'Samsung', 'https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg'),
-('bose', 'Bose', 'https://upload.wikimedia.org/wikipedia/commons/8/82/Bose_logo.svg'),
-('canon', 'Canon', 'https://upload.wikimedia.org/wikipedia/commons/8/82/Canon_logo_vector.svg'),
-('logitech', 'Logitech', 'https://upload.wikimedia.org/wikipedia/commons/1/17/Logitech_logo.svg'),
-('nintendo', 'Nintendo', 'https://upload.wikimedia.org/wikipedia/commons/0/0d/Nintendo.svg'),
-('microsoft', 'Microsoft', 'https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg'),
-('google', 'Google', 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg'),
-('lg', 'LG', 'https://upload.wikimedia.org/wikipedia/commons/b/bf/LG_logo_%282015%29.svg'),
-('dell', 'Dell', 'https://upload.wikimedia.org/wikipedia/commons/4/48/Dell_Logo.svg');
+-- Products (Handcrafted Apparel)
+INSERT INTO products (id, title, description, price, old_price, rating, review_count, category_id, image_url, images, inventory_status, discount, sizes, colors, material, care_instructions, fit, sku, maker_story) VALUES
+  ('jd-top-001', 'Embroidered Linen Blouse', 'A beautifully hand-embroidered linen blouse featuring traditional motifs reimagined for modern style. Each stitch tells a story of craftsmanship and dedication.', 4500, 5500, 4.8, 24, 'tops', 'https://images.unsplash.com/photo-1598554747436-c9293d6a588f?w=600', '["https://images.unsplash.com/photo-1598554747436-c9293d6a588f?w=600", "https://images.unsplash.com/photo-1564246544814-3a6a79abed3e?w=600"]', 'In Stock', 18, '["XS", "S", "M", "L", "XL"]', '[{"name": "Ivory", "hex": "#FFFFF0"}, {"name": "Sage", "hex": "#9DC183"}]', '100% Linen', 'Hand wash cold. Lay flat to dry. Iron on low heat.', 'Relaxed', 'JD-TOP-001', 'This piece was crafted by Fatima, who joined KVTC two years ago. Through dedicated training, she has become one of our most skilled embroidery artisans.'),
 
--- 4. Products
-INSERT INTO products (id, title, description, price, old_price, rating, review_count, category_id, brand_id, image_url, inventory_status, discount, features, specs) VALUES
--- Laptops
-('macbook-pro-14', 'MacBook Pro 14"', 'The most powerful MacBook Pro ever is here. With the blazing-fast M3 Pro or M3 Max chip, the first Apple silicon designed for pros, you get groundbreaking performance and amazing battery life.', 199999.00, 219900.00, 4.9, 128, 'laptops', 'apple', 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&q=80&w=1000', 'In Stock', 9, '["M3 Pro chip", "14-inch Liquid Retina XDR display", "18GB unified memory", "512GB SSD storage"]', '{"Processor": "Apple M3 Pro", "RAM": "18GB", "Storage": "512GB SSD", "Display": "14.2-inch Liquid Retina XDR"}'),
-('xps-15', 'Dell XPS 15', 'Immersive display, powerful performance. The XPS 15 is the perfect balance of power and portability with an InfinityEdge display.', 185000.00, 200000.00, 4.7, 85, 'laptops', 'samsung', 'https://images.unsplash.com/photo-1593642632823-8f78536788c6?auto=format&fit=crop&q=80&w=1000', 'In Stock', 7, '["15.6-inch OLED display", "Intel Core i9", "32GB RAM", "1TB SSD"]', '{"Processor": "Intel Core i9-13900H", "RAM": "32GB DDR5", "Storage": "1TB SSD", "Display": "15.6-inch 3.5K OLED"}'),
+  ('jd-top-002', 'Block Print Cotton Kurta', 'Hand block-printed cotton kurta featuring geometric patterns inspired by Pakistani heritage. Comfortable and elegant for everyday wear.', 3800, NULL, 4.6, 18, 'tops', 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600', '["https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600"]', 'In Stock', NULL, '["S", "M", "L", "XL"]', '[{"name": "Indigo", "hex": "#4B0082"}, {"name": "Terracotta", "hex": "#E2725B"}]', '100% Cotton', 'Machine wash cold. Tumble dry low.', 'Regular', 'JD-TOP-002', 'Ahmed spent six months mastering the art of block printing. Each kurta takes him a full day to complete, ensuring every print is perfect.'),
 
--- Audio
-('sony-wh1000xm5', 'Sony WH-1000XM5', 'Industry-leading noise cancellation with two processors controlling 8 microphones for unprecedented noise cancellation and exceptional call quality.', 29990.00, 34990.00, 4.8, 450, 'audio', 'sony', 'https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?auto=format&fit=crop&q=80&w=1000', 'In Stock', 14, '["Industry-leading noise cancellation", "30-hour battery life", "Crystal clear hands-free calling", "Multipoint connection"]', '{"Type": "Over-ear", "Battery Life": "30 hours", "Noise Cancellation": "Yes", "Weight": "250g"}'),
-('airpods-max', 'AirPods Max', 'AirPods Max reimagine over-ear headphones. An Apple-designed dynamic driver provides high-fidelity audio. Every detail, from canopy to cushions, has been designed for an exceptional fit.', 59900.00, 0, 4.6, 210, 'audio', 'apple', 'https://images.unsplash.com/photo-1613040809024-b4ef7ba99bc3?auto=format&fit=crop&q=80&w=1000', 'Low Stock', 0, '["Active Noise Cancellation", "Transparency mode", "Spatial audio", "20 hours of listening time"]', '{"Type": "Over-ear", "Battery Life": "20 hours", "Noise Cancellation": "Yes", "Weight": "384.8g"}'),
+  ('jd-dress-001', 'Handwoven Cotton Maxi Dress', 'Flowing maxi dress crafted from handwoven cotton fabric. Features delicate hand-stitched detailing at the neckline and sleeves.', 7500, 8500, 4.9, 31, 'dresses', 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=600', '["https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=600", "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=600"]', 'In Stock', 12, '["XS", "S", "M", "L"]', '[{"name": "Natural", "hex": "#F5F5DC"}, {"name": "Dusty Rose", "hex": "#DCAE96"}]', 'Handwoven Cotton', 'Hand wash cold. Do not bleach. Hang to dry.', 'Flowy', 'JD-DRS-001', 'Woven by our team of artisans in Karachi, this fabric takes three days to complete on traditional looms operated by specially trained craftspeople.'),
 
--- Wearables
-('apple-watch-ultra', 'Apple Watch Ultra 2', 'The most rugged and capable Apple Watch pushes the limits again. Featuring the all-new S9 SiP.', 89900.00, 0, 4.9, 150, 'wearables', 'apple', 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&q=80&w=1000', 'In Stock', 0, '["49mm titanium case", "Water resistant 100m", "Up to 36 hours battery life", "Precision dual-frequency GPS"]', '{"Case Material": "Titanium", "Size": "49mm", "Connectivity": "GPS + Cellular", "Water Resistance": "100m"}'),
-('galaxy-watch-6', 'Samsung Galaxy Watch 6', 'Start your everyday wellness journey. Galaxy Watch6 Classic features a rotating bezel for easy navigation.', 34999.00, 39999.00, 4.5, 95, 'wearables', 'samsung', 'https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&q=80&w=1000', 'In Stock', 12, '["Rotating bezel", "Sleep coaching", "Heart rate monitoring", "Sapphire Crystal glass"]', '{"Case Material": "Stainless Steel", "Size": "47mm", "Connectivity": "Bluetooth", "Water Resistance": "IP68"}'),
+  ('jd-dress-002', 'Appliqué Work A-Line Dress', 'Elegant A-line dress with intricate appliqué work. Perfect for special occasions while supporting artisan livelihoods.', 6200, NULL, 4.7, 15, 'dresses', 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600', '["https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600"]', 'In Stock', NULL, '["S", "M", "L", "XL"]', '[{"name": "Midnight Blue", "hex": "#191970"}, {"name": "Emerald", "hex": "#50C878"}]', 'Cotton Blend', 'Dry clean recommended.', 'A-Line', 'JD-DRS-002', 'Zara has been with KVTC for three years, specializing in appliqué work. Her attention to detail makes each dress unique.'),
 
--- Phones
-('iphone-15-pro', 'iPhone 15 Pro Max', 'Titanium design. A17 Pro chip. The longest optical zoom in iPhone ever. And a customizable Action button.', 159900.00, 0, 4.8, 500, 'phones', 'apple', 'https://images.unsplash.com/photo-1696446701796-da61225697cc?auto=format&fit=crop&q=80&w=1000', 'In Stock', 0, '["Titanium design", "A17 Pro chip", "48MP Main camera", "USB-C connector"]', '{"Processor": "A17 Pro", "Storage": "256GB", "Display": "6.7-inch Super Retina XDR", "Camera": "48MP Main"}'),
-('s24-ultra', 'Samsung Galaxy S24 Ultra', 'Unleash new ways to create, connect and more with Galaxy AI. The new titanium exterior is tougher than ever.', 129999.00, 134999.00, 4.7, 320, 'phones', 'samsung', 'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?auto=format&fit=crop&q=80&w=1000', 'In Stock', 4, '["Galaxy AI", "Titanium frame", "200MP camera", "Built-in S Pen"]', '{"Processor": "Snapdragon 8 Gen 3", "Storage": "512GB", "Display": "6.8-inch QHD+", "Camera": "200MP Main"}'),
+  ('jd-bottom-001', 'Wide Leg Palazzo Pants', 'Comfortable wide-leg palazzo pants with hand-embroidered hem. Pairs beautifully with any top from our collection.', 3200, 3800, 4.5, 22, 'bottoms', 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600', '["https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600"]', 'In Stock', 16, '["XS", "S", "M", "L", "XL"]', '[{"name": "Black", "hex": "#000000"}, {"name": "Cream", "hex": "#FFFDD0"}]', 'Viscose', 'Machine wash cold. Iron on medium heat.', 'Wide Leg', 'JD-BTM-001', 'Created by Hassan, who discovered his talent for stitching through the KVTC program. He now trains new artisans joining the program.'),
 
--- Cameras
-('eos-r5', 'Canon EOS R5', 'Professional mirrorless redefined. 45MP full-frame sensor, 8K video, and advanced autofocus.', 339995.00, 350000.00, 4.9, 60, 'cameras', 'canon', 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80&w=1000', 'Low Stock', 3, '["45MP Full-Frame Sensor", "8K Video Recording", "In-Body Image Stabilization", "Dual Pixel CMOS AF II"]', '{"Sensor": "Full-Frame CMOS", "Resolution": "45MP", "Video": "8K RAW", "ISO Range": "100-51200"}'),
-('a7iv', 'Sony Alpha 7 IV', 'The basic has never been this good. 33MP full-frame sensor with outstanding performance for both stills and movies.', 244990.00, 262990.00, 4.8, 110, 'cameras', 'sony', 'https://images.unsplash.com/photo-1516724562728-afc824a36e84?auto=format&fit=crop&q=80&w=1000', 'In Stock', 7, '["33MP Full-Frame Exmor R Sensor", "4K 60p Video", "Real-time Eye AF", "Vari-angle LCD"]', '{"Sensor": "Full-Frame Exmor R", "Resolution": "33MP", "Video": "4K 60p", "ISO Range": "100-51200"}'),
+  ('jd-bottom-002', 'Handloom Cotton Trousers', 'Classic straight-cut trousers made from handloom cotton. Comfortable enough for daily wear, elegant enough for the office.', 2800, NULL, 4.4, 12, 'bottoms', 'https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=600', '["https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=600"]', 'In Stock', NULL, '["S", "M", "L", "XL", "XXL"]', '[{"name": "Navy", "hex": "#000080"}, {"name": "Khaki", "hex": "#C3B091"}]', 'Handloom Cotton', 'Machine wash cold. Hang to dry.', 'Straight', 'JD-BTM-002', 'This piece supports our core mission: providing dignified employment to differently-abled individuals through skill development.'),
 
--- Tablets
-('ipad-pro-12', 'iPad Pro 12.9"', 'The ultimate iPad experience with the M2 chip.', 112900.00, 0, 4.9, 320, 'tablets', 'apple', 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&q=80&w=1000', 'In Stock', 0, '["M2 chip", "12.9-inch Liquid Retina XDR display", "ProMotion technology", "Face ID"]', '{"Processor": "M2", "Storage": "128GB", "Display": "12.9-inch Liquid Retina XDR"}'),
-('galaxy-tab-s9', 'Samsung Galaxy Tab S9 Ultra', 'Crystal clear viewing on a large AMOLED display.', 108999.00, 119999.00, 4.7, 150, 'tablets', 'samsung', 'https://images.unsplash.com/photo-1588702547923-7093a6c3f067?auto=format&fit=crop&q=80&w=1000', 'In Stock', 9, '["14.6-inch Dynamic AMOLED 2X", "Snapdragon 8 Gen 2", "S Pen included", "IP68 water resistance"]', '{"Processor": "Snapdragon 8 Gen 2", "Storage": "256GB", "Display": "14.6-inch AMOLED"}'),
+  ('jd-outer-001', 'Hand-Knit Cardigan', 'Cozy hand-knit cardigan perfect for layering. Each piece takes over 40 hours to complete by our skilled artisans.', 5800, 6800, 4.8, 28, 'outerwear', 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600', '["https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600"]', 'In Stock', 15, '["S", "M", "L", "XL"]', '[{"name": "Oatmeal", "hex": "#D9C8B4"}, {"name": "Charcoal", "hex": "#36454F"}]', 'Wool Blend', 'Hand wash cold. Lay flat to dry. Do not hang.', 'Oversized', 'JD-OUT-001', 'Hand-knitted by Mariam, who has been part of KVTC for four years. Knitting has given her financial independence and creative expression.'),
 
--- Gaming
-('ps5', 'PlayStation 5', 'Experience lightning fast loading with an ultra-high speed SSD.', 54990.00, 0, 4.9, 1200, 'gaming', 'sony', 'https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?auto=format&fit=crop&q=80&w=1000', 'In Stock', 0, '["Ultra-high speed SSD", "Ray Tracing", "4K-TV Gaming", "Haptic Feedback"]', '{"Storage": "825GB SSD", "Resolution": "4K", "Frame Rate": "Up to 120fps"}'),
-('xbox-series-x', 'Xbox Series X', 'The fastest, most powerful Xbox ever.', 55990.00, 0, 4.8, 950, 'gaming', 'microsoft', 'https://images.unsplash.com/photo-1621259182902-885a1c933c7d?auto=format&fit=crop&q=80&w=1000', 'In Stock', 0, '["12 TFLOPS Processing Power", "True 4K Gaming", "1TB Custom SSD", "8K HDR"]', '{"Storage": "1TB SSD", "Resolution": "True 4K", "Frame Rate": "Up to 120fps"}'),
-('switch-oled', 'Nintendo Switch OLED', '7-inch OLED screen for vivid colors and crisp contrast.', 33990.00, 0, 4.8, 800, 'gaming', 'nintendo', 'https://images.unsplash.com/photo-1578303512597-81e6cc155b3e?auto=format&fit=crop&q=80&w=1000', 'In Stock', 0, '["7-inch OLED screen", "Wide adjustable stand", "Wired LAN port", "64GB internal storage"]', '{"Storage": "64GB", "Screen": "7-inch OLED", "Modes": "TV, Tabletop, Handheld"}'),
+  ('jd-outer-002', 'Quilted Cotton Jacket', 'Lightweight quilted jacket with traditional pattern stitching. Perfect for transitional weather.', 4800, NULL, 4.6, 19, 'outerwear', 'https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=600', '["https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=600"]', 'Low Stock', NULL, '["S", "M", "L"]', '[{"name": "Forest Green", "hex": "#228B22"}, {"name": "Burgundy", "hex": "#800020"}]', 'Quilted Cotton', 'Machine wash cold. Tumble dry low.', 'Regular', 'JD-OUT-002', 'Each jacket is quilted by hand, a skill our artisans learn over months of dedicated training at KVTC.'),
 
--- Smart Home
-('nest-hub', 'Google Nest Hub (2nd Gen)', 'The center of your helpful home.', 7999.00, 9999.00, 4.6, 450, 'smarthome', 'google', 'https://images.unsplash.com/photo-1558002038-1091a166111c?auto=format&fit=crop&q=80&w=1000', 'In Stock', 20, '["Sleep Sensing", "Gesture Control", "Smart Home Control", "Entertainment"]', '{"Display": "7-inch touchscreen", "Connectivity": "Wi-Fi, Bluetooth", "Voice Assistant": "Google Assistant"}'),
+  ('jd-acc-001', 'Hand-Embroidered Tote Bag', 'Spacious tote bag with stunning hand-embroidered floral design. Functional art you can carry every day.', 2500, 3000, 4.9, 45, 'accessories', 'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=600', '["https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=600"]', 'In Stock', 17, '["One Size"]', '[{"name": "Natural Canvas", "hex": "#E8DCC4"}, {"name": "Ocean Blue", "hex": "#4F97A3"}]', 'Cotton Canvas', 'Spot clean only.', 'One Size', 'JD-ACC-001', 'Our accessories line was started by a group of artisans who wanted to create everyday items that showcase their embroidery skills.'),
 
--- Monitors
-('lg-ultragear', 'LG UltraGear 27"', 'Nano IPS 1ms gaming monitor.', 32999.00, 45000.00, 4.7, 210, 'monitors', 'lg', 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&q=80&w=1000', 'In Stock', 27, '["27-inch QHD Nano IPS", "144Hz Refresh Rate", "NVIDIA G-SYNC Compatible", "HDR 10"]', '{"Resolution": "2560 x 1440", "Refresh Rate": "144Hz", "Response Time": "1ms"}');
+  ('jd-acc-002', 'Woven Scarf', 'Lightweight handwoven scarf with subtle geometric patterns. Adds elegance to any outfit.', 1800, NULL, 4.7, 33, 'accessories', 'https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?w=600', '["https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?w=600"]', 'In Stock', NULL, '["One Size"]', '[{"name": "Blush", "hex": "#DE5D83"}, {"name": "Olive", "hex": "#808000"}, {"name": "Mustard", "hex": "#FFDB58"}]', 'Cotton-Silk Blend', 'Hand wash cold. Iron on low heat.', 'One Size', 'JD-ACC-002', 'Woven on traditional looms by artisans who have transformed their lives through the skills learned at KVTC.'),
 
--- 5. Hero Banners
-INSERT INTO hero_banners (id, title, subtitle, cta, link, image_url, background) VALUES
-('banner-1', 'iPhone 15 Pro', 'Titanium. So strong. So light. So Pro.', 'Shop Now', '/product/iphone-15-pro', 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&q=80&w=2000', 'bg-black'),
-('banner-2', 'MacBook Air 15"', 'Impressively big. Impossibly thin.', 'Learn More', '/product/macbook-pro-14', 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&q=80&w=2000', 'bg-[#F5F5F7]'),
-('banner-3', 'Sony WH-1000XM5', 'Your world. Nothing else.', 'Buy Now', '/product/sony-wh1000xm5', 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&q=80&w=2000', 'bg-[#E5E5E5]');
+  ('jd-acc-003', 'Beaded Statement Necklace', 'Bold beaded necklace handcrafted using traditional beading techniques. A unique statement piece.', 1500, 1800, 4.5, 27, 'accessories', 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=600', '["https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=600"]', 'In Stock', 17, '["One Size"]', '[{"name": "Coral", "hex": "#FF7F50"}, {"name": "Turquoise", "hex": "#40E0D0"}]', 'Glass Beads, Cotton Thread', 'Store flat. Avoid water.', 'One Size', 'JD-ACC-003', 'Beading requires incredible patience and precision. Our artisans spend weeks perfecting this skill before creating pieces for sale.'),
 
--- 6. Flash Deals
-INSERT INTO flash_deals (product_id, claimed, starts_at, ends_at) VALUES
-('sony-wh1000xm5', 85, NOW(), DATE_ADD(NOW(), INTERVAL 24 HOUR)),
-('xps-15', 45, NOW(), DATE_ADD(NOW(), INTERVAL 24 HOUR)),
-('galaxy-watch-6', 60, NOW(), DATE_ADD(NOW(), INTERVAL 24 HOUR)),
-('eos-r5', 15, NOW(), DATE_ADD(NOW(), INTERVAL 24 HOUR));
+  ('jd-top-003', 'Crochet Detail Blouse', 'Elegant blouse featuring hand-crocheted lace collar. A perfect blend of tradition and contemporary style.', 4200, NULL, 4.6, 16, 'tops', 'https://images.unsplash.com/photo-1564246544814-3a6a79abed3e?w=600', '["https://images.unsplash.com/photo-1564246544814-3a6a79abed3e?w=600"]', 'In Stock', NULL, '["XS", "S", "M", "L"]', '[{"name": "White", "hex": "#FFFFFF"}, {"name": "Pearl", "hex": "#EAE0C8"}]', 'Cotton with Crochet Detail', 'Hand wash recommended. Lay flat to dry.', 'Fitted', 'JD-TOP-003', 'Ayesha learned crocheting at KVTC and now creates intricate lace patterns that adorn our premium pieces.');
 
--- 7. Recommendation Sections & Items
+-- Recommendation sections
 INSERT INTO recommendation_sections (id, title) VALUES
-('trending', 'Trending Now'),
-('new-arrivals', 'New Arrivals');
+  ('featured', 'Featured Collection'),
+  ('new-arrivals', 'New Arrivals'),
+  ('bestsellers', 'Community Favorites');
 
+-- Recommendation items
 INSERT INTO recommendation_items (section_id, product_id, position) VALUES
-('trending', 'iphone-15-pro', 1),
-('trending', 'airpods-max', 2),
-('trending', 's24-ultra', 3),
-('trending', 'macbook-pro-14', 4),
-('new-arrivals', 'apple-watch-ultra', 1),
-('new-arrivals', 'a7iv', 2),
-('new-arrivals', 'sony-wh1000xm5', 3),
-('new-arrivals', 'xps-15', 4);
+  ('featured', 'jd-dress-001', 1),
+  ('featured', 'jd-top-001', 2),
+  ('featured', 'jd-acc-001', 3),
+  ('featured', 'jd-outer-001', 4),
+  ('new-arrivals', 'jd-top-003', 1),
+  ('new-arrivals', 'jd-dress-002', 2),
+  ('new-arrivals', 'jd-bottom-002', 3),
+  ('new-arrivals', 'jd-acc-003', 4),
+  ('bestsellers', 'jd-acc-001', 1),
+  ('bestsellers', 'jd-top-002', 2),
+  ('bestsellers', 'jd-outer-001', 3),
+  ('bestsellers', 'jd-dress-001', 4);
 
--- 8. Site Content
+-- Hero banner
+INSERT INTO hero_banners (id, title, subtitle, cta, link, image_url, background) VALUES
+  ('main-hero', 'Fashion with Purpose', 'Every purchase empowers differently-abled artisans', 'Shop Collection', '/shop', 'https://images.unsplash.com/photo-1558171813-4c088753af8f?w=1200', '#f5f0eb');
+
+-- Site content
 INSERT INTO site_content (content_key, content_value) VALUES
-('notification', 'Free shipping on all orders over Rs. 5,000. Limited time only.');
-
--- 9. Addresses (Sample for Demo User)
-INSERT INTO addresses (user_id, label, recipient, line1, city, phone) VALUES
-(1, 'Home', 'Demo User', '123 Tech Park, Sector 5', 'Bangalore', '9876543210');
-
--- 10. Orders (Sample for Demo User)
-INSERT INTO orders (user_id, status, total, shipping_address_id) VALUES
-(1, 'Delivered', 29990.00, 1);
-
-INSERT INTO order_items (order_id, product_id, quantity, price) VALUES
-(1, 'sony-wh1000xm5', 1, 29990.00);
-
--- 11. Wishlists (Sample for Demo User)
-INSERT INTO wishlists (user_id, product_id) VALUES
-(1, 'macbook-pro-14');
+  ('notification_bar', 'Free shipping on orders over Rs. 5,000 | Every purchase supports artisan livelihoods'),
+  ('impact_artisans', '150+'),
+  ('impact_products', '5,000+'),
+  ('impact_wages', '₨ 2M+');

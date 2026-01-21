@@ -10,6 +10,7 @@ import adminRoutes from './routes/admin.js'
 import statsRoutes from './routes/stats.js'
 import adminOrdersRoutes from './routes/adminOrders.js'
 import adminProductsRoutes from './routes/adminProducts.js'
+import donationsRoutes from './routes/donations.js'
 import { loadEnv } from './config/env.js'
 
 const env = loadEnv()
@@ -32,6 +33,7 @@ app.use('/api/wishlist', wishlistRoutes)
 app.use('/api/admin', adminRoutes)
 app.use('/api/admin/orders', adminOrdersRoutes)
 app.use('/api/admin/products', adminProductsRoutes)
+app.use('/api/donations', donationsRoutes)
 app.use('/api/stats', statsRoutes)
 
 app.use((req, res) => {
