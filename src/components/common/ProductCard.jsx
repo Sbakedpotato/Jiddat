@@ -33,9 +33,9 @@ const ProductCard = ({ product, children }) => {
   return (
     <div className="group flex flex-col rounded-xl bg-white p-3 transition-all hover:shadow-soft">
       <Link to={`/product/${product.id}`} className="relative block overflow-hidden rounded-lg bg-brand-light/30">
-        {product.image ? (
+        {(product.image || product.imageUrl) ? (
           <img
-            src={product.image}
+            src={product.image || product.imageUrl}
             alt={product.title}
             className="h-64 w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />

@@ -21,7 +21,6 @@ async function request(path, options = {}) {
     throw new Error(message || `Request failed: ${response.status}`)
   }
 
-  // Gracefully handle empty/204 responses from endpoints like DELETE wishlist
   if (response.status === 204) return null
 
   const contentType = response.headers.get('content-type') || ''
@@ -33,6 +32,7 @@ async function request(path, options = {}) {
 }
 
 export const api = {
+  // Catalog
   getHeroBanners: async () => {
     const data = await request('/catalog/hero-banners')
     return (data || []).map((item) => ({ ...item, image: item.image || item.imageUrl }))
@@ -42,11 +42,9 @@ export const api = {
     return (data || []).map((item) => ({ ...item, label: item.label || item.name }))
   },
   getRecommendations: () => request('/catalog/recommendations'),
-  getFlashDeals: () => request('/catalog/flash-deals'),
-  getFeaturedBrands: async () => {
-    const data = await request('/catalog/brands')
-    return (data || []).map((item) => ({ ...item, image: item.image || item.imageUrl }))
-  },
+  getNotification: () => request('/catalog/notification'),
+
+  // Products
   listProducts: () => request('/products'),
   searchProducts: (keyword, categoryId) => {
     const params = new URLSearchParams()
@@ -56,10 +54,15 @@ export const api = {
   },
   getProductsByCategory: (categoryId) => request(`/products/category/${categoryId}`),
   getProductDetail: (productId) => request(`/products/${productId}`),
+
+  // Account
   getAccountOverview: () => request('/account/me', { auth: true }),
   deleteAddress: (id) => request(`/account/addresses/${id}`, { method: 'DELETE', auth: true }),
-  getNotification: () => request('/catalog/notification'),
+
+  // Orders
   checkout: (payload) => request('/orders/checkout', { method: 'POST', body: JSON.stringify(payload), auth: true }),
+
+  // Wishlist
   getWishlist: () => request('/wishlist', { auth: true }),
   addToWishlist: (productId) =>
     request('/wishlist', {
@@ -72,6 +75,16 @@ export const api = {
       method: 'DELETE',
       auth: true,
     }),
+
+  // Donations
+  createDonation: (data) =>
+    request('/donations', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+  getDonationStatus: (id) => request(`/donations/${id}`),
+
+  // Admin
   getAdminOrders: (params) => {
     const query = new URLSearchParams(params).toString()
     return request(`/admin/orders?${query}`, { auth: true })
@@ -105,12 +118,6 @@ export const api = {
       body: JSON.stringify(data),
       auth: true,
     }),
-  getAIRecommendations: async (limit = 4) => {
-    const data = await request('/products')
-    const products = data || []
-    // Randomly select products
-    return products.sort(() => 0.5 - Math.random()).slice(0, limit)
-  },
 }
 
 export async function login(email, password) {

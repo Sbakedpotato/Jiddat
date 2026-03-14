@@ -15,8 +15,7 @@ router.get('/', async (req, res) => {
         const offset = (page - 1) * limit
 
         let baseSql = `FROM products p 
-                   LEFT JOIN categories c ON p.category_id = c.id
-                   LEFT JOIN brands b ON p.brand_id = b.id`
+                   LEFT JOIN categories c ON p.category_id = c.id`
         const params = []
         const conditions = []
 
@@ -35,14 +34,22 @@ router.get('/', async (req, res) => {
 
         // Fetch
         const [rows] = await query(`
-      SELECT p.*, c.name as category_name, b.name as brand_name 
+      SELECT p.*, c.name as category_name
       ${baseSql}
       ORDER BY p.created_at DESC
       LIMIT ? OFFSET ?
     `, [...params, Number(limit), Number(offset)])
 
+        // Parse JSON fields
+        const products = rows.map(p => ({
+            ...p,
+            sizes: safeParse(p.sizes, []),
+            colors: safeParse(p.colors, []),
+            images: safeParse(p.images, []),
+        }))
+
         res.json({
-            products: rows,
+            products,
             total,
             page: Number(page),
             totalPages: Math.ceil(total / limit)
@@ -53,21 +60,46 @@ router.get('/', async (req, res) => {
     }
 })
 
+const safeParse = (value, fallback) => {
+    if (!value) return fallback
+    if (typeof value === 'object') return value
+    try {
+        return JSON.parse(value)
+    } catch {
+        return fallback
+    }
+}
+
 // Create product
 router.post('/', async (req, res) => {
     try {
-        const { title, description, price, category_id, brand_id, image_url, inventory_status, features, specs } = req.body
+        const {
+            title, description, price, category_id, image_url, images,
+            inventory_status, sizes, colors, material, care_instructions, fit, sku, maker_story
+        } = req.body
 
         if (!title || !price || !category_id) {
             return res.status(400).json({ message: 'Title, price, and category are required' })
         }
 
-        const id = randomUUID()
+        const id = `jd-${randomUUID().slice(0, 8)}`
 
         await query(`
-      INSERT INTO products (id, title, description, price, category_id, brand_id, image_url, inventory_status, features, specs)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `, [id, title, description, price, category_id, brand_id || null, image_url, inventory_status || 'In Stock', JSON.stringify(features || []), JSON.stringify(specs || {})])
+      INSERT INTO products (id, title, description, price, category_id, image_url, images,
+        inventory_status, sizes, colors, material, care_instructions, fit, sku, maker_story)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `, [
+            id, title, description, price, category_id, image_url,
+            JSON.stringify(images || []),
+            inventory_status || 'In Stock',
+            JSON.stringify(sizes || []),
+            JSON.stringify(colors || []),
+            material || null,
+            care_instructions || null,
+            fit || null,
+            sku || null,
+            maker_story || null
+        ])
 
         res.status(201).json({ message: 'Product created', id })
     } catch (error) {
@@ -77,12 +109,11 @@ router.post('/', async (req, res) => {
 })
 
 // Delete product
-// Delete product
 router.delete('/:id', async (req, res) => {
     try {
         const { id } = req.params
 
-        // 1. Check if product is in any orders
+        // Check if product is in any orders
         const [orderItems] = await query('SELECT id FROM order_items WHERE product_id = ? LIMIT 1', [id])
         if (orderItems.length > 0) {
             return res.status(400).json({
@@ -90,12 +121,11 @@ router.delete('/:id', async (req, res) => {
             })
         }
 
-        // 2. Delete from related tables (foreign key constraints)
-        await query('DELETE FROM flash_deals WHERE product_id = ?', [id])
+        // Delete from related tables
         await query('DELETE FROM recommendation_items WHERE product_id = ?', [id])
         await query('DELETE FROM wishlists WHERE product_id = ?', [id])
 
-        // 3. Delete the product
+        // Delete the product
         const [result] = await query('DELETE FROM products WHERE id = ?', [id])
 
         if (result.affectedRows === 0) {
@@ -109,8 +139,6 @@ router.delete('/:id', async (req, res) => {
     }
 })
 
-
-
 // Get single product
 router.get('/:id', async (req, res) => {
     try {
@@ -120,8 +148,9 @@ router.get('/:id', async (req, res) => {
 
         const product = rows[0]
         // Parse JSON fields
-        if (typeof product.features === 'string') product.features = JSON.parse(product.features)
-        if (typeof product.specs === 'string') product.specs = JSON.parse(product.specs)
+        product.sizes = safeParse(product.sizes, [])
+        product.colors = safeParse(product.colors, [])
+        product.images = safeParse(product.images, [])
 
         res.json(product)
     } catch (error) {
@@ -134,7 +163,10 @@ router.get('/:id', async (req, res) => {
 router.put('/:id', async (req, res) => {
     try {
         const { id } = req.params
-        const { title, description, price, category_id, brand_id, image_url, inventory_status, features, specs } = req.body
+        const {
+            title, description, price, category_id, image_url, images,
+            inventory_status, sizes, colors, material, care_instructions, fit, sku, maker_story
+        } = req.body
 
         if (!title || !price || !category_id) {
             return res.status(400).json({ message: 'Title, price, and category are required' })
@@ -142,10 +174,24 @@ router.put('/:id', async (req, res) => {
 
         await query(`
       UPDATE products 
-      SET title = ?, description = ?, price = ?, category_id = ?, brand_id = ?, 
-          image_url = ?, inventory_status = ?, features = ?, specs = ?
+      SET title = ?, description = ?, price = ?, category_id = ?, 
+          image_url = ?, images = ?, inventory_status = ?,
+          sizes = ?, colors = ?, material = ?, care_instructions = ?,
+          fit = ?, sku = ?, maker_story = ?
       WHERE id = ?
-    `, [title, description, price, category_id, brand_id || null, image_url, inventory_status, JSON.stringify(features || []), JSON.stringify(specs || {}), id])
+    `, [
+            title, description, price, category_id, image_url,
+            JSON.stringify(images || []),
+            inventory_status,
+            JSON.stringify(sizes || []),
+            JSON.stringify(colors || []),
+            material || null,
+            care_instructions || null,
+            fit || null,
+            sku || null,
+            maker_story || null,
+            id
+        ])
 
         res.json({ message: 'Product updated' })
     } catch (error) {

@@ -12,31 +12,37 @@ const baseSelect = `SELECT
   p.rating,
   p.review_count AS reviewCount,
   p.category_id AS categoryId,
-  p.brand_id AS brandId,
   p.image_url AS image,
+  p.images,
   p.inventory_status AS inventoryStatus,
   p.discount,
-  p.features,
-  p.specs,
-  c.name AS categoryLabel,
-  b.name AS brand
+  p.sizes,
+  p.colors,
+  p.material,
+  p.care_instructions AS careInstructions,
+  p.fit,
+  p.sku,
+  p.maker_story AS makerStory,
+  c.name AS categoryLabel
 FROM products p
-LEFT JOIN categories c ON c.id = p.category_id
-LEFT JOIN brands b ON b.id = p.brand_id`
-
-const mapProduct = (row) => ({
-  ...row,
-  features: typeof row.features === 'string' ? safeParse(row.features, []) : row.features,
-  specs: typeof row.specs === 'string' ? safeParse(row.specs, {}) : row.specs,
-})
+LEFT JOIN categories c ON c.id = p.category_id`
 
 const safeParse = (value, fallback) => {
+  if (!value) return fallback
+  if (typeof value === 'object') return value
   try {
     return JSON.parse(value)
   } catch (error) {
     return fallback
   }
 }
+
+const mapProduct = (row) => ({
+  ...row,
+  sizes: safeParse(row.sizes, []),
+  colors: safeParse(row.colors, []),
+  images: safeParse(row.images, []),
+})
 
 router.get('/', async (req, res) => {
   const { q, category } = req.query

@@ -4,6 +4,16 @@ import { query } from '../config/db.js'
 
 const router = express.Router()
 
+const safeParse = (value, fallback) => {
+  if (!value) return fallback
+  if (typeof value === 'object') return value
+  try {
+    return JSON.parse(value)
+  } catch {
+    return fallback
+  }
+}
+
 const baseSelect = `SELECT
   p.id,
   p.title,
@@ -13,23 +23,26 @@ const baseSelect = `SELECT
   p.rating,
   p.review_count AS reviewCount,
   p.category_id AS categoryId,
-  p.brand_id AS brandId,
   p.image_url AS image,
   p.inventory_status AS inventoryStatus,
   p.discount,
-  p.features,
-  p.specs,
-  c.name AS categoryLabel,
-  b.name AS brand
+  p.sizes,
+  p.colors,
+  p.material,
+  p.maker_story AS makerStory,
+  c.name AS categoryLabel
 FROM wishlists w
 JOIN products p ON p.id = w.product_id
 LEFT JOIN categories c ON c.id = p.category_id
-LEFT JOIN brands b ON b.id = p.brand_id
 WHERE w.user_id = ?`
 
 router.get('/', authenticate, async (req, res) => {
   const [rows] = await query(`${baseSelect} ORDER BY w.created_at DESC`, [req.user.id])
-  res.json(rows)
+  res.json(rows.map(row => ({
+    ...row,
+    sizes: safeParse(row.sizes, []),
+    colors: safeParse(row.colors, []),
+  })))
 })
 
 router.post('/', authenticate, async (req, res) => {
