@@ -44,9 +44,8 @@ router.get('/', async (req, res) => {
       SELECT o.id, o.total, o.status, o.created_at, u.name as user_name, u.email as user_email
       ${baseSql}
       ORDER BY o.created_at DESC 
-      LIMIT ? OFFSET ?
+      LIMIT ${Number(limit)} OFFSET ${Number(offset)}
     `
-        params.push(Number(limit), Number(offset))
 
         const [rows] = await query(dataSql, params)
 
