@@ -11,13 +11,13 @@ router.use(authenticate, requireAdmin)
 router.get('/dashboard', async (req, res) => {
     try {
         // 1. Total Users
-        const [userCount] = await query('SELECT COUNT(*) as count FROM users WHERE role = "user"')
+        const [userCount] = await query("SELECT COUNT(*) as count FROM users WHERE role = 'user'")
 
         // 2. Total Orders
         const [orderCount] = await query('SELECT COUNT(*) as count FROM orders')
 
         // 3. Total Revenue
-        const [revenueTotal] = await query('SELECT SUM(total) as total FROM orders WHERE status != "Cancelled"')
+        const [revenueTotal] = await query("SELECT SUM(total) as total FROM orders WHERE status != 'Cancelled'")
 
         // 4. Recent Activity (Last 5 orders)
         const [recentOrders] = await query(`
