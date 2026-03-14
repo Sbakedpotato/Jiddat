@@ -37,8 +37,8 @@ router.get('/', async (req, res) => {
       SELECT p.*, c.name as category_name
       ${baseSql}
       ORDER BY p.created_at DESC
-      LIMIT ? OFFSET ?
-    `, [...params, Number(limit), Number(offset)])
+      LIMIT ${Number(limit)} OFFSET ${Number(offset)}
+    `, params)
 
         // Parse JSON fields
         const products = rows.map(p => ({
