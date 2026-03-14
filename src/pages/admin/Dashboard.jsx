@@ -10,7 +10,7 @@ export default function Dashboard() {
         const fetchStats = async () => {
             try {
                 const token = localStorage.getItem('token')
-                const res = await fetch('http://localhost:4000/api/stats/dashboard', {
+                const res = await fetch('/api/stats/dashboard', {
                     headers: { Authorization: `Bearer ${token}` }
                 })
                 if (!res.ok) throw new Error('Failed to load stats')

@@ -13,7 +13,7 @@ export default function CreateAdmin() {
 
         try {
             const token = localStorage.getItem('token')
-            const res = await fetch('http://localhost:4000/api/admin/create-admin', {
+            const res = await fetch('/api/admin/create-admin', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
