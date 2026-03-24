@@ -25,7 +25,7 @@ const AdminHeader = () => {
             <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-4">
                 {/* Logo */}
                 <Link to="/admin/dashboard" className="flex items-center gap-2">
-                    <span className="text-2xl font-bold tracking-tight text-brand-black">GoCart <span className="text-brand-accent">Admin</span></span>
+                    <span className="text-2xl font-bold tracking-tight text-brand-black">Jiddat <span className="text-brand-accent">Admin</span></span>
                 </Link>
 
                 {/* Navigation */}
