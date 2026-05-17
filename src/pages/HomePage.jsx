@@ -86,7 +86,6 @@ const HomePage = () => {
       {/* Shop by Category */}
       <CategoryShortcuts categories={categories} />
 
-      {/* CTA Blocks - Shop + Donate */}
       <CTABlocks />
     </div>
   )
