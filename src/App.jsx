@@ -13,7 +13,6 @@ import NotFoundPage from './pages/NotFoundPage'
 import ContactPage from './pages/ContactPage'
 import FAQPage from './pages/FAQPage'
 import PoliciesPage from './pages/PoliciesPage'
-import DonatePage from './pages/DonatePage'
 import OurStoryPage from './pages/OurStoryPage'
 import AdminLayout from './layouts/AdminLayout'
 import AdminLogin from './pages/admin/AdminLogin'
@@ -36,7 +35,6 @@ function App() {
           <Route path="/shop" element={<ShopPage />} />
           <Route path="/product/:productId" element={<ProductPage />} />
           <Route path="/our-story" element={<OurStoryPage />} />
-          <Route path="/donate" element={<DonatePage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/wishlist" element={<WishlistPage />} />
           <Route path="/contact" element={<ContactPage />} />
