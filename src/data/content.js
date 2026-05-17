@@ -19,7 +19,6 @@ export const siteContent = {
         headline: 'Fashion with Purpose',
         subheadline: 'Every purchase empowers differently-abled artisans to build skills, earn income, and achieve independence.',
         ctaShop: 'Shop Collection',
-        ctaDonate: 'Support Our Mission',
         backgroundImage: 'https://images.unsplash.com/photo-1558171813-4c088753af8f?w=1600',
     },
 
@@ -85,34 +84,7 @@ export const siteContent = {
             buttonText: 'Shop Now',
             link: '/shop',
         },
-        donate: {
-            title: 'Support the Mission',
-            description: 'Your donation funds training, materials, and support services for our artisans.',
-            buttonText: 'Make a Donation',
-            link: '/donate',
-        },
     },
-
-    // Donation Page
-    donate: {
-        headline: 'Support Our Mission',
-        subheadline: 'Your generosity creates lasting change',
-        description: 'Every donation directly funds training programs, materials, equipment, and support services for differently-abled artisans. Help us empower more individuals to build skills, earn fair wages, and achieve independence.',
-        whatYourDonationFunds: [
-            { amount: 'Rs. 500', impact: 'Provides craft supplies for one artisan for a week' },
-            { amount: 'Rs. 2,500', impact: 'Sponsors one month of skills training' },
-            { amount: 'Rs. 5,000', impact: 'Funds equipment for a new artisan workstation' },
-            { amount: 'Rs. 10,000', impact: 'Supports an artisan\'s full training program' },
-        ],
-        presetAmounts: [500, 1000, 2500, 5000, 10000],
-        currency: 'PKR',
-        currencySymbol: 'Rs.',
-        thankYou: {
-            headline: 'Thank You for Your Generosity',
-            message: 'Your donation will directly support the training and empowerment of differently-abled artisans. Together, we\'re creating opportunities and changing lives.',
-        },
-    },
-
     // Our Story / About Page
     ourStory: {
         hero: {
@@ -205,7 +177,6 @@ export const siteContent = {
             support: {
                 title: 'Support',
                 links: [
-                    { label: 'Donate', href: '/donate' },
                     { label: 'FAQs', href: '/faqs' },
                     { label: 'Shipping & Returns', href: '/policies#shipping' },
                 ],
@@ -226,7 +197,6 @@ export const siteContent = {
             { label: 'Home', href: '/' },
             { label: 'Shop', href: '/shop' },
             { label: 'Our Story', href: '/our-story' },
-            { label: 'Donate', href: '/donate' },
             { label: 'Contact', href: '/contact' },
         ],
     },
